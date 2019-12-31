@@ -3,9 +3,9 @@ package main
 //go:generate go run ./design/data-compiler txt main credits
 
 import (
-	"github.com/20kdc/CCUpdaterUI/design"
-	"github.com/20kdc/CCUpdaterUI/frenyard/framework"
-	"github.com/20kdc/CCUpdaterUI/middle"
+	"github.com/CCDirectLink/CCUpdaterUI/design"
+	"github.com/CCDirectLink/CCUpdaterUI/frenyard/framework"
+	"github.com/CCDirectLink/CCUpdaterUI/middle"
 	"encoding/base64"
 	"strings"
 	"strconv"

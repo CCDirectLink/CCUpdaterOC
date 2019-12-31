@@ -2,8 +2,8 @@ package design
 
 import (
 	"strings"
-	"github.com/20kdc/CCUpdaterUI/frenyard"
-	"github.com/20kdc/CCUpdaterUI/frenyard/framework"
+	"github.com/CCDirectLink/CCUpdaterUI/frenyard"
+	"github.com/CCDirectLink/CCUpdaterUI/frenyard/framework"
 )
 
 // SortListItemDetails is a sort.Interface implementation for use on ListItemDetails slices.

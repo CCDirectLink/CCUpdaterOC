@@ -6,7 +6,7 @@ if [ "$GOOS" = linux ]; then
  #  from within a container (to ensure that any libc linkage is as portable as possible)
  # IF IT FAILS HERE BECAUSE OF A MISSING CONTAINER, RUN THIS:
  # docker build --tag ccupdaterui-env . -f linux.Dockerfile
- docker run -v "`pwd`/..:/go/src/github.com/20kdc/CCUpdaterUI:rw" ccupdaterui-env
+ docker run -v "`pwd`/..:/go/src/github.com/CCDirectLink/CCUpdaterUI:rw" ccupdaterui-env
  mv ../CCUpdaterUI CCUpdaterUI.linux
  zip CCUpdaterUI.linux.zip CCUpdaterUI.linux
 elif [ "$GOOS" = windows ]; then

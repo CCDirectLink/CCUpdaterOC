@@ -33,7 +33,7 @@ func FindWarnings(game *ccmodupdater.GameInstance) []Warning {
 	crosscode := game.Packages()["crosscode"]
 	if crosscode == nil {
 		warnings = append(warnings, Warning{
-			Text: "CrossCode is not installed in this installation. (Ok, come on, how'd you manage this? - 20kdc)",
+			Text: "CrossCode is not installed in this installation. (Ok, come on, how'd you manage this? - CCDirectLink)",
 		})
 	} else if crosscode.Metadata().Version().LessThan(semver.MustParse("1.1.0")) {
 		warnings = append(warnings, Warning{

@@ -1,6 +1,6 @@
 package framework
 
-import "github.com/20kdc/CCUpdaterUI/frenyard"
+import "github.com/CCDirectLink/CCUpdaterUI/frenyard"
 
 // A NinePatchFrameLayer provides the visuals for a given layer of a NinePatchFrame.
 type NinePatchFrameLayer struct {

@@ -1,8 +1,8 @@
 package design
 
 import (
-	"github.com/20kdc/CCUpdaterUI/frenyard"
-	"github.com/20kdc/CCUpdaterUI/frenyard/integration"
+	"github.com/CCDirectLink/CCUpdaterUI/frenyard"
+	"github.com/CCDirectLink/CCUpdaterUI/frenyard/integration"
 	"github.com/golang/freetype"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/gofont/gobold"

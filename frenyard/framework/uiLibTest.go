@@ -2,7 +2,7 @@ package framework
 
 import (
 	"fmt"
-	"github.com/20kdc/CCUpdaterUI/frenyard"
+	"github.com/CCDirectLink/CCUpdaterUI/frenyard"
 )
 
 // UIEventDebugger is a simple test element to debug events.

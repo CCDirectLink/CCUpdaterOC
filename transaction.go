@@ -4,8 +4,8 @@ import (
 	"os"
 	"time"
 	"github.com/CCDirectLink/CCUpdaterCLI"
-	"github.com/20kdc/CCUpdaterUI/frenyard/framework"
-	"github.com/20kdc/CCUpdaterUI/middle"
+	"github.com/CCDirectLink/CCUpdaterUI/frenyard/framework"
+	"github.com/CCDirectLink/CCUpdaterUI/middle"
 )
 
 // PerformTransaction performs a transaction, showing UI for it as well.

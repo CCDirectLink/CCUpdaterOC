@@ -1,6 +1,6 @@
 package framework
 
-import "github.com/20kdc/CCUpdaterUI/frenyard"
+import "github.com/CCDirectLink/CCUpdaterUI/frenyard"
 
 // SlideTransition represents a specific transition queued for a UISlideTransitionContainer.
 type SlideTransition struct {

@@ -3,7 +3,7 @@ package middle
 import (
 	"github.com/CCDirectLink/CCUpdaterCLI"
 	"github.com/CCDirectLink/CCUpdaterCLI/remote"
-	"github.com/20kdc/CCUpdaterUI/design"
+	"github.com/CCDirectLink/CCUpdaterUI/design"
 )
 
 // FakeError should be enabled to prevent internet access by CCUpdaterUI.

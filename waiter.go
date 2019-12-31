@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/20kdc/CCUpdaterUI/design"
-	"github.com/20kdc/CCUpdaterUI/frenyard"
-	"github.com/20kdc/CCUpdaterUI/frenyard/framework"
-	"github.com/20kdc/CCUpdaterUI/frenyard/integration"
+	"github.com/CCDirectLink/CCUpdaterUI/design"
+	"github.com/CCDirectLink/CCUpdaterUI/frenyard"
+	"github.com/CCDirectLink/CCUpdaterUI/frenyard/framework"
+	"github.com/CCDirectLink/CCUpdaterUI/frenyard/integration"
 )
 
 func (app *upApplication) ShowWaiter(text string, a func(func(string)), b func()) {

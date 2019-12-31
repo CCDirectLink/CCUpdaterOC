@@ -2,8 +2,8 @@ package framework
 
 import (
 	"golang.org/x/image/font"
-	"github.com/20kdc/CCUpdaterUI/frenyard"
-	"github.com/20kdc/CCUpdaterUI/frenyard/integration"
+	"github.com/CCDirectLink/CCUpdaterUI/frenyard"
+	"github.com/CCDirectLink/CCUpdaterUI/frenyard/integration"
 )
 
 // UIRect is a 'filler' background element.

@@ -1,5 +1,5 @@
 package framework
-import "github.com/20kdc/CCUpdaterUI/frenyard"
+import "github.com/CCDirectLink/CCUpdaterUI/frenyard"
 
 // A NinePatch is a resizable rectangular border and background to fit a given container.
 type NinePatch struct {
