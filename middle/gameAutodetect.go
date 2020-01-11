@@ -2,16 +2,16 @@ package middle
 
 import (
 	"os"
-	"github.com/CCDirectLink/CCUpdaterCLI"
-	"github.com/CCDirectLink/CCUpdaterCLI/local"
+
+	"github.com/CCDirectLink/ccmu/game"
 )
 
 // GameLocation represents a location a copy of CrossCode may be in.
 type GameLocation struct {
 	// True for CrossCode installs. This overrules everything else, including Drive.
-	Valid bool
+	Valid    bool
 	Location string
-	Version string
+	Version  string
 	// If not empty, this is a drive, and has a special overridden name
 	Drive string
 }
@@ -28,28 +28,27 @@ func detectPossibleGameLocations() []string {
 	// A and B are historically floppy disk drives, but try anyway.
 	for i := 0; i < 26; i++ {
 		drive := string(rune('A' + i))
-		locations = append(locations, drive + ":\\Program Files/Steam/steamapps/common/CrossCode", drive + ":\\Program Files (x86)/Steam/steamapps/common/CrossCode")
+		locations = append(locations, drive+":\\Program Files/Steam/steamapps/common/CrossCode", drive+":\\Program Files (x86)/Steam/steamapps/common/CrossCode")
 	}
 	return locations
 }
 
 // CheckGameLocation converts a path into a GameLocation, making sure to set Valid & Version correctly in the process.
 func CheckGameLocation(dir string) GameLocation {
-	gameInstance := ccmodupdater.NewGameInstance(dir)
-	plugins, err := local.AllLocalPackagePlugins(gameInstance)
-	if err == nil {
-		gameInstance.LocalPlugins = plugins
-		ccDetails, hasCC := gameInstance.Packages()["crosscode"]
-		if hasCC {
-			return GameLocation{
-				Valid: true,
-				Location: dir,
-				Version: ccDetails.Metadata().Version().Original(),
-			}
+	gameInstance := game.At(dir)
+	path, err := gameInstance.BasePath()
+	if err != nil {
+		return GameLocation{
+			Location: dir,
 		}
 	}
+	cc, _ := gameInstance.Get("crosscode")
+	info, _ := cc.Info()
+
 	return GameLocation{
-		Location: dir,
+		Valid:    true,
+		Location: path,
+		Version:  info.CurrentVersion,
 	}
 }
 

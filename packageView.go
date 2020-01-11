@@ -6,41 +6,33 @@ import (
 	"github.com/CCDirectLink/CCUpdaterUI/frenyard/framework"
 	"github.com/CCDirectLink/CCUpdaterUI/frenyard/integration"
 	"github.com/CCDirectLink/CCUpdaterUI/middle"
-	"github.com/CCDirectLink/CCUpdaterCLI"
+	"github.com/CCDirectLink/ccmu/pkg"
 )
 
 // ShowPackageView shows a dialog for a package.
 // backHeavy is used if nothing actually happened.
 // backLight is used if something happened (the ShowPackageView return call has both set to the same value).
 // This allows preserving state in the PrimaryView.
-func (app *upApplication) ShowPackageView(backHeavy framework.ButtonBehavior, backLight framework.ButtonBehavior, pkg string) {
-	// Construct a package context here and use it to sanity-check some things.
-	// It also makes a nice cup-holder for the local/remote repositories.
-	txCtx := ccmodupdater.PackageTXContext{
-		LocalPackages: app.gameInstance.Packages(),
-		RemotePackages: middle.GetRemotePackages(),
-	}
-	// Get local, remote and latest packages for reference.
-	localPkg := txCtx.LocalPackages[pkg]
-	remotePkg := txCtx.RemotePackages[pkg]
-	var latestPkg ccmodupdater.Package = middle.GetLatestOf(localPkg, remotePkg)
-	
+func (app *upApplication) ShowPackageView(backHeavy framework.ButtonBehavior, backLight framework.ButtonBehavior, pkg pkg.Package) {
+	info, _ := pkg.Info()
 	// No latest package = no information.
-	if latestPkg == nil {
+	if pkg == nil {
 		if middle.InternetConnectionWarning {
-			app.MessageBox("Package not available", "The package '" + pkg + "' could not be found.\n\nAs you have ended up here, the package probably had to exist in some form.\nThis error is probably because CCUpdaterUI was unable to retrieve remote packages.\n\n1. Check your internet connection\n2. Try restarting CCUpdaterUI\n3. Contact us", backLight)
+			app.MessageBox("Package not available", "The package '"+info.NiceName+"' could not be found.\n\nAs you have ended up here, the package probably had to exist in some form.\nThis error is probably because CCUpdaterUI was unable to retrieve remote packages.\n\n1. Check your internet connection\n2. Try restarting CCUpdaterUI\n3. Contact us", backLight)
 		} else {
-			app.MessageBox("I just don't know what went wrong...", "The package '" + pkg + "' could not be found.\nYou should never be able to see this dialog in normal operation.", backLight)
+			app.MessageBox("I just don't know what went wrong...", "The package '"+info.NiceName+"' could not be found.\nYou should never be able to see this dialog in normal operation.", backLight)
 		}
 		return
 	}
-	
+
 	// Ok, now let's actually start work on the UI
 	showInstallButton := false
-	annotations := "\n    ID: " + pkg + "\n    Latest Version: " + latestPkg.Metadata().Version().Original()
-	if localPkg != nil {
-		if remotePkg != nil && remotePkg.Metadata().Version().GreaterThan(localPkg.Metadata().Version()) {
-			annotations += "\n    Installed: " + localPkg.Metadata().Version().Original()
+	annotations := "\n    ID: " + info.NiceName + "\n    Latest Version: " + info.CurrentVersion
+
+	if pkg.Installed() {
+		outdated, _ := info.Outdated()
+		if outdated {
+			annotations += "\n    Installed: " + info.CurrentVersion
 			showInstallButton = true
 		} else {
 			annotations += "\n    Installed"
@@ -48,59 +40,68 @@ func (app *upApplication) ShowPackageView(backHeavy framework.ButtonBehavior, ba
 	} else {
 		showInstallButton = true
 	}
+
 	chunks := []integration.TypeChunk{
-		integration.NewColouredTextTypeChunk(latestPkg.Metadata().HumanName(), design.GlobalFont, design.ThemeText),
+		integration.NewColouredTextTypeChunk(info.NiceName, design.GlobalFont, design.ThemeText),
 		integration.NewColouredTextTypeChunk(annotations, design.ListItemSubTextFont, design.ThemeSubText),
 	}
 	buttons := []framework.UILayoutElement{}
-	if (localPkg != nil) && pkg != "Simplify" {
-		removeTx := ccmodupdater.PackageTX{
-			pkg: ccmodupdater.PackageTXOperationRemove,
-		}
-		removeTheme := design.ThemeRemoveActionButton
-		_, removeErr := txCtx.Solve(removeTx)
-		buttonText := "REMOVE"
-		if removeErr != nil {
-			buttonText = "NOT REMOVABLE"
-			removeTheme = design.ThemeImpossibleActionButton
-		}
-		buttons = append(buttons, design.ButtonAction(removeTheme, buttonText, func () {
+	if pkg.Installed() && info.Name != "Simplify" {
+		//TODO
+		/*
+			removeTx := ccmodupdater.PackageTX{
+				pkg: ccmodupdater.PackageTXOperationRemove,
+			}
+			_, removeErr := txCtx.Solve(removeTx)
+			if removeErr != nil {
+				buttonText = "NOT REMOVABLE"
+				removeTheme = design.ThemeImpossibleActionButton
+			}
+		*/
+		buttons = append(buttons, design.ButtonAction(design.ThemeRemoveActionButton, "REMOVE", func() {
 			app.GSDownwards()
-			app.PerformTransaction(func () {
+			app.PerformTransaction(func() {
 				app.GSUpwards()
 				app.ShowPackageView(backHeavy, backHeavy, pkg)
-			}, removeTx)
+			}, transaction{pkg: opUninstall})
 		}))
 	}
 	if showInstallButton {
-		installTx := ccmodupdater.PackageTX{
-			pkg: ccmodupdater.PackageTXOperationInstall,
-		}
+		//TODO
+		/*
+			installTx := ccmodupdater.PackageTX{
+				pkg: ccmodupdater.PackageTXOperationInstall,
+			}
+			_, removeErr := txCtx.Solve(installTx)
+			if removeErr != nil {
+				buttonText = "NOT INSTALLABLE"
+				buttonColour = design.ThemeImpossibleActionButton
+			}
+		*/
 		buttonText := "INSTALL"
 		buttonColour := design.ThemeOkActionButton
-		if localPkg != nil {
+		buttonTx := transaction{pkg: opInstall}
+		outdated, _ := info.Outdated()
+		if outdated {
 			buttonText = "UPDATE"
 			buttonColour = design.ThemeUpdateActionButton
+			buttonTx = transaction{pkg: opUpdate}
 		}
-		_, removeErr := txCtx.Solve(installTx)
-		if removeErr != nil {
-			buttonText = "NOT INSTALLABLE"
-			buttonColour = design.ThemeImpossibleActionButton
-		}
-		buttons = append(buttons, design.ButtonAction(buttonColour, buttonText, func () {
+
+		buttons = append(buttons, design.ButtonAction(buttonColour, buttonText, func() {
 			app.GSDownwards()
-			app.PerformTransaction(func () {
+			app.PerformTransaction(func() {
 				app.GSUpwards()
 				app.ShowPackageView(backHeavy, backHeavy, pkg)
-			}, installTx)
+			}, buttonTx)
 		}))
 	}
-	
+
 	detail := framework.NewUIFlexboxContainerPtr(framework.FlexboxContainer{
 		DirVertical: false,
 		Slots: []framework.FlexboxSlot{
 			framework.FlexboxSlot{
-				Element: design.NewIconPtr(0xFFFFFFFF, middle.PackageIcon(latestPkg), 36),
+				Element: design.NewIconPtr(0xFFFFFFFF, middle.PackageIcon(pkg), 36),
 			},
 			framework.FlexboxSlot{
 				Basis: design.SizeMarginAroundEverything,
@@ -110,7 +111,7 @@ func (app *upApplication) ShowPackageView(backHeavy framework.ButtonBehavior, ba
 			},
 		},
 	})
-	
+
 	fullPanel := framework.NewUIFlexboxContainerPtr(framework.FlexboxContainer{
 		DirVertical: true,
 		Slots: []framework.FlexboxSlot{
@@ -121,11 +122,11 @@ func (app *upApplication) ShowPackageView(backHeavy framework.ButtonBehavior, ba
 				Basis: design.SizeMarginAroundEverything,
 			},
 			framework.FlexboxSlot{
-				Element: framework.NewUILabelPtr(integration.NewTextTypeChunk(latestPkg.Metadata().Description(), design.GlobalFont), design.ThemeText, 0, frenyard.Alignment2i{X: frenyard.AlignStart, Y: frenyard.AlignStart}),
-				Shrink: 1,
+				Element: framework.NewUILabelPtr(integration.NewTextTypeChunk(info.Description, design.GlobalFont), design.ThemeText, 0, frenyard.Alignment2i{X: frenyard.AlignStart, Y: frenyard.AlignStart}),
+				Shrink:  1,
 			},
 			framework.FlexboxSlot{
-				Grow: 1,
+				Grow:   1,
 				Shrink: 1,
 			},
 			framework.FlexboxSlot{
@@ -133,9 +134,9 @@ func (app *upApplication) ShowPackageView(backHeavy framework.ButtonBehavior, ba
 			},
 		},
 	})
-	
+
 	app.Teleport(design.LayoutDocument(design.Header{
-		Title: latestPkg.Metadata().HumanName(),
-		Back: backLight,
+		Title: info.NiceName,
+		Back:  backLight,
 	}, fullPanel, true))
 }

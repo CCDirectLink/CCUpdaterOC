@@ -7,12 +7,12 @@ import (
 	"github.com/CCDirectLink/CCUpdaterUI/frenyard/framework"
 	"github.com/CCDirectLink/CCUpdaterUI/frenyard/integration"
 	"github.com/CCDirectLink/CCUpdaterUI/middle"
-	"github.com/CCDirectLink/CCUpdaterCLI"
-	"github.com/CCDirectLink/CCUpdaterCLI/local"
+	"github.com/CCDirectLink/ccmu/game"
 )
 
 func (app *upApplication) ResetWithGameLocation(save bool, location string) {
-	app.gameInstance = nil
+	app.gameInstance = game.At(location)
+	app.gameSelected = false
 	app.config.GamePath = location
 	if save {
 		middle.WriteUpdaterConfig(app.config)
@@ -23,28 +23,23 @@ func (app *upApplication) ResetWithGameLocation(save bool, location string) {
 
 func (app *upApplication) ShowGameFinderPreface() {
 	var gameLocations []middle.GameLocation
-	app.ShowWaiter("Starting...", func (progress func(string)) {
+	app.ShowWaiter("Starting...", func(progress func(string)) {
 		progress("Preparing remote packages...")
 		middle.GetRemotePackages()
 		progress("Scanning local installation...")
-		gi := ccmodupdater.NewGameInstance(app.config.GamePath)
+		gi := game.At(app.config.GamePath)
 		fmt.Printf("Doing preliminary check of %s\n", app.config.GamePath)
-		lp, err := local.AllLocalPackagePlugins(gi)
+		_, err := gi.BasePath()
 		if err == nil {
-			gi.LocalPlugins = lp
-			_, hasCC := gi.Packages()["crosscode"]
-			if hasCC {
-				app.gameInstance = gi
-				return
-			}
-			fmt.Printf("Game not present?\n")
-		} else {
-			fmt.Printf("Failed check: %s\n", err.Error())
+			app.gameInstance = gi
+			app.gameSelected = true
+			return
 		}
+		fmt.Printf("Game not present?\n")
 		progress("Not configured ; Autodetecting game locations...")
 		gameLocations = middle.AutodetectGameLocations()
-	}, func () {
-		if app.gameInstance == nil {
+	}, func() {
+		if !app.gameSelected {
 			app.ShowGameFinderPrefaceInternal(gameLocations)
 		} else {
 			app.ShowPrimaryView()
@@ -58,10 +53,10 @@ func (app *upApplication) ShowGameFinderPrefaceInternal(locations []middle.GameL
 	for _, location := range locations {
 		suggestSlots = append(suggestSlots, framework.FlexboxSlot{
 			Element: design.ListItem(design.ListItemDetails{
-				Icon: design.GameIconID,
-				Text: "CrossCode " + location.Version,
+				Icon:    design.GameIconID,
+				Text:    "CrossCode " + location.Version,
 				Subtext: location.Location,
-				Click: func () {
+				Click: func() {
 					app.GSRightwards()
 					app.ResetWithGameLocation(true, location.Location)
 				},
@@ -71,16 +66,16 @@ func (app *upApplication) ShowGameFinderPrefaceInternal(locations []middle.GameL
 	}
 	// Space-taker to prevent wrongly scaled list items
 	suggestSlots = append(suggestSlots, framework.FlexboxSlot{
-		Grow: 1,
+		Grow:   1,
 		Shrink: 0,
 	})
 
 	foundInstallsScroller := design.ScrollboxV(framework.NewUIFlexboxContainerPtr(framework.FlexboxContainer{
 		DirVertical: true,
-		WrapMode: framework.FlexboxWrapModeNone,
-		Slots: suggestSlots,
+		WrapMode:    framework.FlexboxWrapModeNone,
+		Slots:       suggestSlots,
 	}))
-	
+
 	content := framework.NewUIFlexboxContainerPtr(framework.FlexboxContainer{
 		DirVertical: true,
 		Slots: []framework.FlexboxSlot{
@@ -91,9 +86,9 @@ func (app *upApplication) ShowGameFinderPrefaceInternal(locations []middle.GameL
 				Basis: design.SizeMarginAroundEverything,
 			},
 			framework.FlexboxSlot{
-				Element: foundInstallsScroller,
-				Grow: 1,
-				Shrink: 1,
+				Element:            foundInstallsScroller,
+				Grow:               1,
+				Shrink:             1,
 				RespectMinimumSize: true,
 			},
 			framework.FlexboxSlot{
@@ -107,9 +102,9 @@ func (app *upApplication) ShowGameFinderPrefaceInternal(locations []middle.GameL
 			},
 			framework.FlexboxSlot{
 				Element: design.ButtonBar([]framework.UILayoutElement{
-					design.ButtonAction(design.ThemeOkActionButton, "LOCATE MANUALLY", func () {
+					design.ButtonAction(design.ThemeOkActionButton, "LOCATE MANUALLY", func() {
 						app.GSDownwards()
-						app.ShowGameFinder(func () {
+						app.ShowGameFinder(func() {
 							app.GSUpwards()
 							app.ShowGameFinderPrefaceInternal(locations)
 						}, middle.GameFinderVFSPathDefault)
@@ -120,9 +115,9 @@ func (app *upApplication) ShowGameFinderPrefaceInternal(locations []middle.GameL
 	})
 	primary := design.LayoutDocument(design.Header{
 		BackIcon: design.WarningIconID,
-		Back: func () {
+		Back: func() {
 			app.GSLeftwards()
-			app.ShowCredits(func () {
+			app.ShowCredits(func() {
 				app.GSRightwards()
 				app.ShowGameFinderPrefaceInternal(locations)
 			})
