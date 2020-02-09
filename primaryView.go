@@ -57,7 +57,7 @@ func (app *upApplication) ShowPrimaryView() {
 		}), true)
 		app.Teleport(thePage)
 	} else {
-		bottomLabelText := "Your need to link your game with the is tool."
+		bottomLabelText := "Your need to link your game with this tool."
 		bottomLabel := framework.FlexboxSlot{
 			Element: framework.NewUILabelPtr(integration.NewTextTypeChunk(bottomLabelText, design.GlobalFont), design.ThemeText, 0, frenyard.Alignment2i{}),
 		}
