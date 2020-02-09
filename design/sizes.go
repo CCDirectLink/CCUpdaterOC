@@ -1,6 +1,6 @@
 package design
 
-import "github.com/CCDirectLink/CCUpdaterUI/frenyard"
+import "github.com/CCDirectLink/CCUpdaterOC/frenyard"
 
 // SizeMarginAroundEverything is a useful margin around the body, etc.
 var SizeMarginAroundEverything int32

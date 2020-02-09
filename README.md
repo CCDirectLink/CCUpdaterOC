@@ -1,10 +1,8 @@
-# CCUpdaterUI
+# CCUpdaterOC
 
 ## Summary
 
-Unofficial mod installer / updater / manager UI for CrossCode.
-
-Not affilated with, not related to, etc. regarding Radical Fish Games.
+A simple 1-Click installer for CrossCode
 
 ## Dependencies
 

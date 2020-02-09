@@ -26,12 +26,12 @@ WORKDIR /ccmu/
 COPY . .
 
 RUN go mod download
-RUN CGO_ENABLED=1 CC=gcc GOOS=linux GOARCH=amd64 go build -v -tags static  -ldflags "-s -w" -o CCUpdaterUI .
-RUN CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc GOOS=windows GOARCH=amd64 go build -v -tags static -ldflags "-s -w -H=windowsgui" -o CCUpdaterUI.exe .
-# RUN CGO_ENABLED=1 CC=o64-clang CXX="o64-clang++" MACOSX_DEPLOYMENT_TARGET=10.13 GOOS=darwin GOARCH=amd64 go build -tags static -ldflags "-s -w" -o CCUpdaterUI_mac .
+RUN CGO_ENABLED=1 CC=gcc GOOS=linux GOARCH=amd64 go build -v -tags static  -ldflags "-s -w" -o CCUpdaterOC .
+RUN CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc GOOS=windows GOARCH=amd64 go build -v -tags static -ldflags "-s -w -H=windowsgui" -o CCUpdaterOC.exe .
+# RUN CGO_ENABLED=1 CC=o64-clang CXX="o64-clang++" MACOSX_DEPLOYMENT_TARGET=10.13 GOOS=darwin GOARCH=amd64 go build -tags static -ldflags "-s -w" -o CCUpdaterOC_mac .
 
 FROM halverneus/static-file-server
 
-COPY --from=builder /ccmu/CCUpdaterUI /web/
-COPY --from=builder /ccmu/CCUpdaterUI.exe /web/
-# COPY --from=builder /ccmu/CCUpdaterUI_mac /web/
+COPY --from=builder /ccmu/CCUpdaterOC /web/
+COPY --from=builder /ccmu/CCUpdaterOC.exe /web/
+# COPY --from=builder /ccmu/CCUpdaterOC_mac /web/

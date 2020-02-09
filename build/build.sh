@@ -1,16 +1,16 @@
 #!/bin/sh
 export GOOS="$1"
 if [ "$GOOS" = linux ]; then
- rm CCUpdaterUI.linux CCUpdaterUI.linux.zip
+ rm CCUpdaterOC.linux CCUpdaterOC.linux.zip
  # Linux: standard non-static compilation (to prevent linking with deps we haven't worked out the licensing of)
  #  from within a container (to ensure that any libc linkage is as portable as possible)
  # IF IT FAILS HERE BECAUSE OF A MISSING CONTAINER, RUN THIS:
- # docker build --tag ccupdaterui-env . -f linux.Dockerfile
- docker run -v "`pwd`/..:/go/src/github.com/CCDirectLink/CCUpdaterUI:rw" ccupdaterui-env
- mv ../CCUpdaterUI CCUpdaterUI.linux
- zip CCUpdaterUI.linux.zip CCUpdaterUI.linux
+ # docker build --tag CCUpdaterOC-env . -f linux.Dockerfile
+ docker run -v "`pwd`/..:/go/src/github.com/CCDirectLink/CCUpdaterOC:rw" CCUpdaterOC-env
+ mv ../CCUpdaterOC CCUpdaterOC.linux
+ zip CCUpdaterOC.linux.zip CCUpdaterOC.linux
 elif [ "$GOOS" = windows ]; then
- rm CCUpdaterUI.windows.exe CCUpdaterUI.windows.zip
+ rm CCUpdaterOC.windows.exe CCUpdaterOC.windows.zip
  # Windows: https://github.com/veandco/go-sdl2#cross-compiling
  #  this is honestly just the same solution as with Linux, just with a different method
  #  it's for the same reasons, too - we need to link with msvcrt.dll and/or no CRT at all for version compat.
@@ -25,8 +25,8 @@ elif [ "$GOOS" = windows ]; then
  echo " + Get the MinGW devlibs from https://www.libsdl.org/download-2.0.php"
  echo " + Overwrite libSDL2_windows_386.a with 32-bit libSDL2.a"
  echo " + Overwrite libSDL2main_windows_386.a with 32-bit libSDL2main.a"
- mv ../CCUpdaterUI.exe CCUpdaterUI.windows.exe
- zip CCUpdaterUI.windows.zip CCUpdaterUI.windows.exe
+ mv ../CCUpdaterOC.exe CCUpdaterOC.windows.exe
+ zip CCUpdaterOC.windows.zip CCUpdaterOC.windows.exe
 elif [ "$GOOS" = darwin ]; then
  echo "Sorry!"
  # Mac OS X:

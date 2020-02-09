@@ -1,9 +1,9 @@
 package design
 
 import (
-	"github.com/CCDirectLink/CCUpdaterUI/frenyard"
-	"github.com/CCDirectLink/CCUpdaterUI/frenyard/framework"
-	"github.com/CCDirectLink/CCUpdaterUI/frenyard/integration"
+	"github.com/CCDirectLink/CCUpdaterOC/frenyard"
+	"github.com/CCDirectLink/CCUpdaterOC/frenyard/framework"
+	"github.com/CCDirectLink/CCUpdaterOC/frenyard/integration"
 )
 
 /*

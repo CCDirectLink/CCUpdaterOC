@@ -1,4 +1,4 @@
 {
- "name": "CCUpdaterUI",
+ "name": "CCUpdaterOC",
  "files": [ { "directory": ".",  "recursive": 1 } ]
 }

@@ -2,7 +2,7 @@ package framework
 
 import (
 	"fmt"
-	"github.com/CCDirectLink/CCUpdaterUI/frenyard"
+	"github.com/CCDirectLink/CCUpdaterOC/frenyard"
 )
 
 /*

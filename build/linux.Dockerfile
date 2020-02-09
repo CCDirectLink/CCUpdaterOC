@@ -8,9 +8,9 @@
 # it's the only way to be sure
 FROM golang:stretch@sha256:ff71d89f78e4fbc348c783d6978edf2721d7f360a11f70df1db91ce5acc36de1
 # Start by declaring where I/O goes
-RUN mkdir -p /go/src/github.com/CCDirectLink/CCUpdaterUI
-VOLUME /go/src/github.com/CCDirectLink/CCUpdaterUI
-WORKDIR /go/src/github.com/CCDirectLink/CCUpdaterUI
+RUN mkdir -p /go/src/github.com/CCDirectLink/CCUpdaterOC
+VOLUME /go/src/github.com/CCDirectLink/CCUpdaterOC
+WORKDIR /go/src/github.com/CCDirectLink/CCUpdaterOC
 # Dependency management goes here
 RUN apt-get update
 RUN apt-get install -y libsdl2-dev

@@ -25,11 +25,6 @@ type Warning struct {
 // FindWarnings detects issues with the installation to show on the primary view.
 func FindWarnings(game game.Game) []Warning {
 	warnings := []Warning{}
-	if InternetConnectionWarning {
-		warnings = append(warnings, Warning{
-			Text: "CCUpdaterUI wasn't able to retrieve the mod metadata; downloading mods is not possible.",
-		})
-	}
 	crosscode, err := game.Get("crosscode")
 	if err != nil {
 		warnings = append(warnings, Warning{
@@ -54,28 +49,6 @@ func FindWarnings(game game.Game) []Warning {
 					Text: "The CrossCode version is " + info.CurrentVersion + "; mods usually expect 1.1.0 or higher.",
 				})
 			}
-		}
-	}
-
-	ccloader, err := game.Get("ccloader")
-	if err != nil || !ccloader.Installed() {
-		warnings = append(warnings, Warning{
-			Text:      "No modloader is installed; thus any mods installed cannot be run.",
-			Action:    InstallOrUpdatePackageWarningID,
-			Parameter: "ccloader",
-		})
-	} else {
-		info, err := ccloader.Info()
-		if err != nil {
-			warnings = append(warnings, Warning{
-				Text: "The CCLoader version could not be read.",
-			})
-		} else if outdated, _ := info.Outdated(); outdated {
-			warnings = append(warnings, Warning{
-				Text:      "CCLoader is out of date. This may cause buggy behavior, or mods may rely on missing features.",
-				Action:    InstallOrUpdatePackageWarningID,
-				Parameter: "ccloader",
-			})
 		}
 	}
 	return warnings

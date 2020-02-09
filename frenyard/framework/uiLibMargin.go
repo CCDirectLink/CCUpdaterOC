@@ -1,7 +1,7 @@
 package framework
 
 import (
-	"github.com/CCDirectLink/CCUpdaterUI/frenyard"
+	"github.com/CCDirectLink/CCUpdaterOC/frenyard"
 )
 
 // NewUIMarginContainerPtr is a wrapper around NewUIOverlayContainerPtr which creates a margin without any other details around a given element.

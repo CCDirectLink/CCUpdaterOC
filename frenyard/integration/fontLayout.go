@@ -1,7 +1,7 @@
 package integration
 
 import (
-	"github.com/CCDirectLink/CCUpdaterUI/frenyard"
+	"github.com/CCDirectLink/CCUpdaterOC/frenyard"
 	"image"
 	"golang.org/x/image/math/fixed"
 )

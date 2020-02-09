@@ -1,6 +1,6 @@
 ccmodupdater.log
 build/*.zip
-CCUpdaterUI
-CCUpdaterUI.linux
-CCUpdaterUI.exe
-CCUpdaterUI.windows.exe
+CCUpdaterOC
+CCUpdaterOC.linux
+CCUpdaterOC.exe
+CCUpdaterOC.windows.exe

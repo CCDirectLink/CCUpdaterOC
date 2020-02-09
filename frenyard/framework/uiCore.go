@@ -2,7 +2,7 @@ package framework
 
 import (
 	"fmt"
-	"github.com/CCDirectLink/CCUpdaterUI/frenyard"
+	"github.com/CCDirectLink/CCUpdaterOC/frenyard"
 )
 
 // FocusEvent is an event type specific to the UI framework that represents focusing/unfocusing the receiving element.

@@ -1,6 +1,6 @@
 package design
-import "github.com/CCDirectLink/CCUpdaterUI/frenyard"
-import "github.com/CCDirectLink/CCUpdaterUI/frenyard/framework"
+import "github.com/CCDirectLink/CCUpdaterOC/frenyard"
+import "github.com/CCDirectLink/CCUpdaterOC/frenyard/framework"
 
 var borderGenSquareMaskX4Shadow framework.NinePatch
 var borderGenSquareMaskX4Mask framework.NinePatch

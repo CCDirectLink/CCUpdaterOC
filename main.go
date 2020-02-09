@@ -1,11 +1,17 @@
 package main
 
 import (
-	"github.com/CCDirectLink/CCUpdaterUI/design"
-	"github.com/CCDirectLink/CCUpdaterUI/frenyard"
-	"github.com/CCDirectLink/CCUpdaterUI/frenyard/framework"
-	"github.com/CCDirectLink/CCUpdaterUI/middle"
+	"flag"
+	"net/url"
+	"os"
+	"strings"
+
+	"github.com/CCDirectLink/CCUpdaterOC/design"
+	"github.com/CCDirectLink/CCUpdaterOC/frenyard"
+	"github.com/CCDirectLink/CCUpdaterOC/frenyard/framework"
+	"github.com/CCDirectLink/CCUpdaterOC/middle"
 	"github.com/CCDirectLink/ccmu/game"
+	"github.com/CCDirectLink/ccmu/pkg"
 )
 
 type upApplication struct {
@@ -65,7 +71,7 @@ func main() {
 	frenyard.TargetFrameTime = 0.016
 	slideContainer := framework.NewUISlideTransitionContainerPtr(nil)
 	slideContainer.FyEResize(design.SizeWindowInit)
-	wnd, err := framework.CreateBoundWindow("CCUpdaterUI", true, design.ThemeBackground, slideContainer)
+	wnd, err := framework.CreateBoundWindow("CCUpdaterOC", true, design.ThemeBackground, slideContainer)
 	if err != nil {
 		panic(err)
 	}
@@ -79,7 +85,15 @@ func main() {
 		upQueued:         make(chan func(), 16),
 		teleportSettings: framework.SlideTransition{},
 	})
-	app.ShowGameFinderPreface()
+
+	pkg := app.parseArgs()
+
+	if pkg != nil {
+		app.ShowPackageView(func() {}, func() {}, pkg)
+	} else {
+		app.ShowGameFinderPreface()
+	}
+
 	// Started!
 	frenyard.GlobalBackend.Run(func(frameTime float64) {
 		select {
@@ -88,4 +102,35 @@ func main() {
 		default:
 		}
 	})
+}
+
+func (app *upApplication) parseArgs() pkg.Package {
+	if len(os.Args) <= 1 {
+		return nil
+	}
+
+	flag.String("game", "", "if set it overrides the path of the game")
+	uri := flag.String("url", "", "the url that executed ccmu")
+	flag.Parse()
+
+	if uri == nil || *uri == "" {
+		return nil
+	}
+
+	raw := *uri
+	arg := strings.Split(raw[7:len(raw)-1], "/")[0]
+	arg, err := url.PathUnescape(arg)
+	if err != nil {
+		return nil
+	}
+
+	app.gameInstance = game.At(flag.Lookup("game").Value.String())
+	app.gameSelected = true
+
+	result := app.gameInstance.Find(arg)
+	if len(result) == 0 {
+		return nil
+	}
+
+	return result[0]
 }

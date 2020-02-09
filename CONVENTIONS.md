@@ -4,9 +4,9 @@ Submodules are 2-letter prefixes meant to further discourage interference.
 
 `<submodule>` is `fy` for `frenyard`.
 
-`<submodule>` is `de` for `CCUpdaterUI/design`.
+`<submodule>` is `de` for `CCUpdaterOC/design`.
 
-`<submodule>` is `up` for `CCUpdaterUI` itself.
+`<submodule>` is `up` for `CCUpdaterOC` itself.
 
 ## Terminology
 

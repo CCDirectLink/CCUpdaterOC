@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/CCDirectLink/CCUpdaterUI/design"
-	"github.com/CCDirectLink/CCUpdaterUI/frenyard"
-	"github.com/CCDirectLink/CCUpdaterUI/frenyard/framework"
-	"github.com/CCDirectLink/CCUpdaterUI/frenyard/integration"
-	"github.com/CCDirectLink/CCUpdaterUI/middle"
+	"github.com/CCDirectLink/CCUpdaterOC/design"
+	"github.com/CCDirectLink/CCUpdaterOC/frenyard"
+	"github.com/CCDirectLink/CCUpdaterOC/frenyard/framework"
+	"github.com/CCDirectLink/CCUpdaterOC/frenyard/integration"
+	"github.com/CCDirectLink/CCUpdaterOC/middle"
 	"github.com/CCDirectLink/ccmu/pkg"
 )
 
@@ -17,11 +17,7 @@ func (app *upApplication) ShowPackageView(backHeavy framework.ButtonBehavior, ba
 	info, _ := pkg.Info()
 	// No latest package = no information.
 	if pkg == nil {
-		if middle.InternetConnectionWarning {
-			app.MessageBox("Package not available", "The package '"+info.NiceName+"' could not be found.\n\nAs you have ended up here, the package probably had to exist in some form.\nThis error is probably because CCUpdaterUI was unable to retrieve remote packages.\n\n1. Check your internet connection\n2. Try restarting CCUpdaterUI\n3. Contact us", backLight)
-		} else {
-			app.MessageBox("I just don't know what went wrong...", "The package '"+info.NiceName+"' could not be found.\nYou should never be able to see this dialog in normal operation.", backLight)
-		}
+		app.MessageBox("Package not available", "The package '"+info.NiceName+"' could not be found.\n\nAs you have ended up here, the package probably had to exist in some form.\nThis error is probably because we were unable to retrieve remote packages.\n\n1. Check your internet connection\n2. Try restarting the installer\n3. Contact us", backLight)
 		return
 	}
 
@@ -137,6 +133,5 @@ func (app *upApplication) ShowPackageView(backHeavy framework.ButtonBehavior, ba
 
 	app.Teleport(design.LayoutDocument(design.Header{
 		Title: info.NiceName,
-		Back:  backLight,
 	}, fullPanel, true))
 }

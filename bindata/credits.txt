@@ -35,7 +35,7 @@ CCUpdaterUI may, when asked to install a package, install other packages necessa
 It is assumed that asking to install the package grants permission to do this to prevent failures.
 
 ~!~
-CCDirectLink/CCUpdaterCLI
+CCDirectLink/ccmu
 backend to the program
 ~!~
 

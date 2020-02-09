@@ -1,7 +1,7 @@
 package integration
 
 import (
-	"github.com/CCDirectLink/CCUpdaterUI/frenyard"
+	"github.com/CCDirectLink/CCUpdaterOC/frenyard"
 	"encoding/base64"
 	"image"
 	"image/png"

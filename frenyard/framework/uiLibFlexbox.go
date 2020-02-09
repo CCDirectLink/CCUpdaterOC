@@ -3,7 +3,7 @@ package framework
 import (
 	"fmt"
 	"sort"
-	"github.com/CCDirectLink/CCUpdaterUI/frenyard"
+	"github.com/CCDirectLink/CCUpdaterOC/frenyard"
 )
 
 

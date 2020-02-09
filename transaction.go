@@ -4,7 +4,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/CCDirectLink/CCUpdaterUI/frenyard/framework"
+	"github.com/CCDirectLink/CCUpdaterOC/frenyard/framework"
 	"github.com/CCDirectLink/ccmu/pkg"
 )
 
