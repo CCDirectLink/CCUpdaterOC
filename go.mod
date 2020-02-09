@@ -3,8 +3,6 @@ module github.com/CCDirectLink/CCUpdaterOC
 go 1.13
 
 require (
-	github.com/CCDirectLink/CCUpdaterCLI v1.2.0 // indirect
-	github.com/CCDirectLink/CCUpdaterOC v1.0.0-rc2
 	github.com/CCDirectLink/ccmu v0.0.0-20200209115612-6f03ccd58027
 	github.com/Masterminds/semver v1.5.0
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
